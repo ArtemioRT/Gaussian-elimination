@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3  # Asegúrate de usar la versión más reciente
         with:
           submodules: true
           lfs: false
@@ -27,10 +27,9 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "" # Built app content directory - optional
+          app_location: "/" # Ruta al código fuente de tu aplicación
+          api_location: "" # Ruta al código fuente de tu API (opcional)
+          output_location: "" # Directorio de salida del build de tu aplicación (opcional)
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
@@ -41,6 +40,10 @@ jobs:
       - name: Close Pull Request
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WONDERFUL_ROCK_03F1B3F0F }}
+          action: "close"
+
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WONDERFUL_ROCK_03F1B3F0F }}
           action: "close"
