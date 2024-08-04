@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminación Gaussiana</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .matrix-input {
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        .result {
+            white-space: pre-wrap;
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .nav-tabs .nav-link {
+            color: #3498db;
+        }
+        .nav-tabs .nav-link.active {
+            color: #2c3e50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container animate__animated animate__fadeIn">
+        <h1 class="mt-4 mb-4">Eliminación Gaussiana</h1>
+        
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">Matriz</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="construction-tab" data-toggle="tab" href="#construction" role="tab" aria-controls="construction" aria-selected="false">Problema</a>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <label for="matrixSize">Tamaño de la matriz (N): </label>
+                        <input type="number" id="matrixSize" min="2" value="3" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <button id="generateMatrix" class="btn btn-primary mt-4 animate__animated animate__pulse">Generar la matriz</button>
+                    </div>
+                </div>
+                <form id="matrixForm" class="matrix-input mt-4">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead id="matrixHeader">
+                                <!-- Matrix header will be generated here -->
+                            </thead>
+                            <tbody id="matrixBody">
+                                <!-- Matrix input will be generated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="submit" class="btn btn-success animate__animated animate__pulse">Solución</button>
+                </form>
+                <div id="result" class="result mt-4"></div>
+            </div>
+            
+            <div class="tab-pane fade" id="construction" role="tabpanel" aria-labelledby="construction-tab">
+                <div class="mt-4">
+                    <h2>Problema de la empresa constructora</h2>
+                    <p>Una empresa constructora de estructuras tiene la siguiente distribución de productos y materiales: en el producto A se gastan 400 Kg de cemento, 1700 Kg de hormigón y 600 Kg de acero. En el producto B se consumen 600 Kg de cemento, 550 Kg de hormigón y 450 Kg de acero. En el producto C, se consumen 300 Kg de cemento, 400 Kg de hormigón y 375 Kg de acero. Si el consumo dentro de la empresa ha sido de 300 toneladas de cemento, 480 toneladas de hormigón y 375 toneladas de acero, determina cuántos productos de cata tipo se han construido en la empresa, de acuerdo a los consumos mencionados.</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>A</th>
+                                    <th>B</th>
+                                    <th>C</th>
+                                    <th>Consumo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Cemento</td>
+                                    <td>400</td>
+                                    <td>600</td>
+                                    <td>300</td>
+                                    <td>300 000</td>
+                                </tr>
+                                <tr>
+                                    <td>Hormigón</td>
+                                    <td>1700</td>
+                                    <td>550</td>
+                                    <td>400</td>
+                                    <td>480 000</td>
+                                </tr>
+                                <tr>
+                                    <td>Acero</td>
+                                    <td>600</td>
+                                    <td>450</td>
+                                    <td>375</td>
+                                    <td>375 000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="solveConstruction" class="btn btn-primary animate__animated animate__pulse">Resolver problema</button>
+                </div>
+                <div id="constructionResult" class="result mt-4"></div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        let N = 3;
+const matrixBody = document.getElementById('matrixBody');
+const matrixHeader = document.getElementById('matrixHeader');
+const resultDiv = document.getElementById('result');
+const constructionResult = document.getElementById('constructionResult');
+const matrixSizeInput = document.getElementById('matrixSize');
+const generateMatrixButton = document.getElementById('generateMatrix');
+
+function createMatrixInput(size) {
+    matrixBody.innerHTML = '';
+    matrixHeader.innerHTML = '';
+    
+    // Create headers
+    const headerRow = document.createElement('tr');
+    for (let j = 0; j < size; j++) {
+        const headerCell = document.createElement('th');
+        headerCell.textContent = `X${j + 1}`;
+        headerCell.style.width = '100px'; // Set a fixed width for columns
+        headerRow.appendChild(headerCell);
+    }
+    const constantHeader = document.createElement('th');
+    constantHeader.textContent = 'Resultante';
+    constantHeader.style.width = '100px';
+    headerRow.appendChild(constantHeader);
+    matrixHeader.appendChild(headerRow);
+
+    // Create input fields
+    for (let i = 0; i < size; i++) {
+        const row = document.createElement('tr');
+        for (let j = 0; j < size + 1; j++) {
+            const cell = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.step = 'any';
+            input.id = `cell-${i}-${j}`;
+            input.className = 'form-control';
+            cell.appendChild(input);
+            row.appendChild(cell);
+        }
+        matrixBody.appendChild(row);
+    }
+}
+
+function getMatrixValues(size) {
+    const matrix = [];
+    for (let i = 0; i < size; i++) {
+        const row = [];
+        for (let j = 0; j < size + 1; j++) {
+            row.push(parseFloat(document.getElementById(`cell-${i}-${j}`).value) || 0);
+        }
+        matrix.push(row);
+    }
+    return matrix;
+}
+
+function gaussianElimination(matrix) {
+    const size = matrix.length;
+    for (let i = 0; i < size; i++) {
+        // Find pivot
+        let maxRow = i;
+        for (let k = i + 1; k < size; k++) {
+            if (Math.abs(matrix[k][i]) > Math.abs(matrix[maxRow][i])) {
+                maxRow = k;
+            }
+        }
+
+        // Swap rows
+        [matrix[i], matrix[maxRow]] = [matrix[maxRow], matrix[i]];
+
+        // Check for singular matrix
+        if (Math.abs(matrix[i][i]) < 1e-10) {
+            return null; // Matrix is singular
+        }
+
+        // Normalize pivot row
+        let pivot = matrix[i][i];
+        for (let k = i; k < size + 1; k++) {
+            matrix[i][k] /= pivot;
+        }
+
+        // Eliminate rows below
+        for (let k = i + 1; k < size; k++) {
+            let factor = matrix[k][i];
+            for (let j = i; j < size + 1; j++) {
+                matrix[k][j] -= factor * matrix[i][j];
+            }
+        }
+    }
+
+    // Back substitution
+    let solution = Array(size).fill(0);
+    for (let i = size - 1; i >= 0; i--) {
+        solution[i] = matrix[i][size];
+        for (let j = i + 1; j < size; j++) {
+            solution[i] -= matrix[i][j] * solution[j];
+        }
+    }
+
+    return solution;
+}
+
+function checkSolution(matrix, solution) {
+    const size = matrix.length;
+    let equations = [];
+    let isValid = true;
+    let solutionVariables = '';
+
+    for (let i = 0; i < size; i++) {
+        let equation = '';
+        let sum = 0;
+        let validText = '';
+        for (let j = 0; j < size; j++) {
+            equation += `${matrix[i][j].toFixed(2)} * (${solution[j].toFixed(2)}) + `;
+            sum += matrix[i][j] * solution[j];
+            validText += `(${matrix[i][j].toFixed(2)}) * (${solution[j].toFixed(2)})`;
+            if (j < size - 1) {
+                validText += ' + ';
+            }
+        }
+        equation = equation.slice(0, -2); // Remove trailing ' + '
+        equation += ` = ${matrix[i][size].toFixed(2)}`;
+        equations.push(equation);
+
+        // Validate equation
+        if (isNaN(sum) || Math.abs(sum - matrix[i][size]) > 1e-6) {
+            isValid = false;
+            validText += ` ≠ ${matrix[i][size].toFixed(2)}`;
+        } else {
+            validText += ` = ${matrix[i][size].toFixed(2)}`;
+        }
+        equations.push(validText);
+    }
+
+    // Format solution variables
+    solutionVariables = `La solución, las variables son: `;
+    solution.forEach((value, index) => {
+        solutionVariables += `x${index + 1}: ${value.toFixed(2)}`;
+        if (index < size - 1) {
+            solutionVariables += `, `;
+        } else {
+            solutionVariables += `.`;
+        }
+    });
+
+    return { equations, isValid, solutionVariables };
+}
+
+document.getElementById('matrixForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const size = parseInt(matrixSizeInput.value);
+    const matrix = getMatrixValues(size);
+    const originalMatrix = matrix.map(row => [...row]);
+    const solution = gaussianElimination(matrix);
+
+    if (solution === null) {
+        resultDiv.innerHTML = '<div class="alert alert-danger" role="alert">El sistema no tiene una solución única. La matriz es singular.</div>';
+    } else {
+        const { equations, isValid, solutionVariables } = checkSolution(originalMatrix, solution);
+
+        let resultText = `Solución:\n${solution.map((x, i) => `x${i + 1} = ${x.toFixed(6)}`).join('\n')}\n\nValidando las ecuaciones:\n`;
+        resultText += equations.join('\n');
+        resultText += `\n\nValidación: ${isValid ? 'Solución es válida' : 'Solución es inválida'}\n\n`;
+        resultText += `${solutionVariables}`;
+
+        resultDiv.innerHTML = '';
+        const resultAlert = document.createElement('div');
+        resultAlert.className = `alert alert-${isValid ? 'success' : 'danger'}`;
+        resultAlert.setAttribute('role', 'alert');
+        resultAlert.innerHTML = resultText;
+        resultDiv.appendChild(resultAlert);
+
+        if (!isValid) {
+            const errorAlert = document.createElement('div');
+            errorAlert.className = `alert alert-danger mt-3`;
+            errorAlert.setAttribute('role', 'alert');
+            errorAlert.textContent = 'La solución no es válida. Por favor, verifique los valores ingresados.';
+            resultDiv.appendChild(errorAlert);
+        }
+    }
+});
+
+generateMatrixButton.addEventListener('click', function() {
+    N = Math.max(2, parseInt(matrixSizeInput.value));
+    matrixSizeInput.value = N;
+    createMatrixInput(N);
+});
+
+document.getElementById('solveConstruction').addEventListener('click', function() {
+    const matrix = [
+        [400, 600, 300, 300000],
+        [1700, 550, 400, 480000],
+        [600, 450, 375, 375000]
+    ];
+    
+    const solution = gaussianElimination(matrix);
+    
+    if (solution === null) {
+        constructionResult.innerHTML = '<div class="alert alert-danger" role="alert">El sistema no tiene una solución única.</div>';
+    } else {
+        const resultText = `Solución:\nProducto A: ${Math.round(solution[0])} unidades\nProducto B: ${Math.round(solution[1])} unidades\nProducto C: ${Math.round(solution[2])} unidades`;
+        
+        // Validación
+        const { equations, isValid, solutionVariables } = checkSolution(matrix, solution);
+        
+        let validationText = "\n\nValidación de las ecuaciones:\n";
+        validationText += equations.join('\n');
+        validationText += `\n\nValidación: ${isValid ? 'Solución es válida' : 'Solución es inválida'}`;
+        validationText += `\n\n${solutionVariables}`;
+        
+        const resultAlert = document.createElement('div');
+        resultAlert.className = `alert alert-${isValid ? 'success' : 'danger'}`;
+        resultAlert.setAttribute('role', 'alert');
+        resultAlert.innerHTML = resultText + validationText;
+        
+        constructionResult.innerHTML = '';
+        constructionResult.appendChild(resultAlert);
+    }
+});
+
+// Reiniciar la entrada de matriz al cambiar de pestaña
+$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+    if (e.target.href.includes('#general')) {
+        N = parseInt(matrixSizeInput.value); // Actualizar N con el tamaño actual de la matriz
+        createMatrixInput(N); // Volver a generar la entrada de matriz con el tamaño actual
+        resultDiv.innerHTML = ''; // Limpiar el resultado anterior si lo hay
+    } else if (e.target.href.includes('#construction')) {
+        constructionResult.innerHTML = ''; // Limpiar el resultado del problema de construcción
+    }
+});
+// Inicialización
+</script>    
+</body>
+</html>
