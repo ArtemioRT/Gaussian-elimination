@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v3  # Asegúrate de usar la versión más reciente
+      - uses: actions/checkout@v3  # Esta acción se actualizará automáticamente para usar Node.js 20
         with:
           submodules: true
           lfs: false
@@ -43,4 +43,3 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WONDERFUL_ROCK_03F1B3F0F }}
           action: "close"
-
